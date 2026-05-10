@@ -5,8 +5,8 @@ function TableRow({ user, onDelete, onEdit }) {
       <td>{user.email}</td>
       <td>{user.company?.name}</td>
       <td>
-        <button onClick={()=>onDelete(user.id)}>Delete</button>
-        <button onClick={()=> onEdit(user)}>Edit</button>
+        <button className="delete-btn" onClick={()=>onDelete(user.id)}>Delete</button>
+        <button className="edit-btn" onClick={()=> onEdit(user)}>Edit</button>
       </td>
     </tr>
   );

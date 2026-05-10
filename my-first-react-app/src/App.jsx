@@ -5,14 +5,6 @@ import Students from "./Students";
 import SearchBar from "./SearchBar";
 import Table from "./Table";
 function App() {
-  // const users = [
-  //   {name:"Yani",role:"Learner", goal:"become expert in frontend"},
-  //   {name:"Sangam",role:"Manager", goal:"Own a new flat within 1 year"},
-  //   {name:"Swapna",role:"Learner", goal:"become expert in frontend"},
-  //   {name:"Priyanka",role:"React Dev", goal:"To become expert in React"},
-  //   {name:"Taruna",role:"Tester", goal:"To become expert in Automation Testing"},
-
-  // ];
 
   const [sortConfig, setSortConfig] = useState({
     key: "name",
@@ -145,87 +137,124 @@ const searchText = search.toLowerCase();
 
 
   return (
-    <>
-      <div>
-        <SearchBar search={search} setSearch={setSearch} />
-        <button onClick={() => setSearch("")}>Reset</button>
-      </div>
-      <div>
-        <input
-          type="text"
-          placeholder="Name"
-          value={editUserId ? editData.name : newUser.name}
-          onChange={(e) => editUserId ? setEditData({...editData, name: e.target.value}) : setNewUser({ ...newUser, name: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Email"
-          value={ editUserId ? editData.email : newUser.email}
-          onChange={(e) => editUserId ? setEditData({...editData, email: e.target.value}) : setNewUser({ ...newUser, email: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Company Name"
-          value={editUserId ? editData.company : newUser.company}
-          onChange={(e) => editUserId ? setEditData({...editData, company: e.target.value}) : setNewUser({ ...newUser, company: e.target.value })}
-        />
-        <button
-          onClick={ editUserId ? handleUpdate : handleAdd} >
-          {editUserId ? "Update User" : "Add User"}
-        </button>
-        <button onClick={()=>{
-            if(editUserId) { 
-              setEditData(
-                {
-                  name:"", 
-                  email: "", 
-                  company: ""
-                }
-              );
-            setEditUserId(null)
-          }else{
-             setNewUser(
-              {
-                name: "", 
-                email: "", 
-                company: ""
+    <div className="container">
+      <h1>User Management</h1>
+      <div className="toolbar">
+        <div className="search-group">
+          <SearchBar search={search} setSearch={setSearch} />
+          <button className="reset-btn" onClick={() => setSearch("")}>
+            Reset
+          </button>
+        </div>
+
+        <div className="form-group">
+          <input
+            type="text"
+            placeholder="Name"
+            value={editUserId ? editData.name : newUser.name}
+            onChange={(e) =>
+              editUserId
+                ? setEditData({ ...editData, name: e.target.value })
+                : setNewUser({ ...newUser, name: e.target.value })
+            }
+          />
+          <input
+            type="text"
+            placeholder="Email"
+            value={editUserId ? editData.email : newUser.email}
+            onChange={(e) =>
+              editUserId
+                ? setEditData({ ...editData, email: e.target.value })
+                : setNewUser({ ...newUser, email: e.target.value })
+            }
+          />
+          <input
+            type="text"
+            placeholder="Company Name"
+            value={editUserId ? editData.company : newUser.company}
+            onChange={(e) =>
+              editUserId
+                ? setEditData({ ...editData, company: e.target.value })
+                : setNewUser({ ...newUser, company: e.target.value })
+            }
+          />
+          <button
+            className="add-btn"
+            onClick={editUserId ? handleUpdate : handleAdd}
+          >
+            {editUserId ? "Update User" : "Add User"}
+          </button>
+          <button
+            className="reset-btn"
+            onClick={() => {
+              if (editUserId) {
+                setEditData({
+                  name: "",
+                  email: "",
+                  company: "",
+                });
+                setEditUserId(null);
+              } else {
+                setNewUser({
+                  name: "",
+                  email: "",
+                  company: "",
+                });
               }
-            )}
-            }}>
-              Reset
-            </button>
+            }}
+          >
+            Reset
+          </button>
+        </div>
       </div>
 
-      <table border="2">
-        <thead>
-          <tr>
-            <th onClick={() => handleSort("name")}>
-              Name{" "}
-              {sortConfig.key === "name"
-                ? sortConfig.direction === "asc"
-                  ? "▲"
-                  : "▼"
-                : ""}
-            </th>
-            <th onClick={() => handleSort("email")}>
-              Email{" "}
-              {sortConfig.key === "email"
-                ? sortConfig.direction === "asc"
-                  ? "▲"
-                  : "▼"
-                : ""}
-            </th>
-            <th onClick={() => handleSort("company.name")}>
-              Company{" "}
-              {sortConfig.key === "company.name"
-                ? sortConfig.direction === "asc"
-                  ? "▲"
-                  : "▼"
-                : ""}
-            </th>
-          </tr>
-        </thead>
-        {/* <tbody>
+      <div className="table-container">
+        <table border="2">
+          <thead>
+            <tr>
+              <th
+                className={sortConfig.key === "name" ? "active-sort" : ""}
+                onClick={() => handleSort("name")}
+              >
+                Name{" "}
+                <span>
+                  {sortConfig.key === "name"
+                    ? sortConfig.direction === "asc"
+                      ? "▲"
+                      : "▼"
+                    : ""}
+                </span>
+              </th>
+              <th
+                className={sortConfig.key === "email" ? "active-sort" : ""}
+                onClick={() => handleSort("email")}
+              >
+                Email{" "}
+                <span>
+                  {sortConfig.key === "email"
+                    ? sortConfig.direction === "asc"
+                      ? "▲"
+                      : "▼"
+                    : ""}
+                </span>
+              </th>
+              <th
+                className={sortConfig.key === "company" ? "active-sort" : ""}
+                onClick={() => handleSort("company.name")}
+              >
+                Company{" "}
+                <span>
+                  {sortConfig.key === "company.name"
+                    ? sortConfig.direction === "asc"
+                      ? "▲"
+                      : "▼"
+                    : ""}
+                </span>
+              </th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          {/* <tbody>
           {sortedUsers.length === 0 ? (
             <tr>
               <td colSpan="3"> No results found.</td>
@@ -241,9 +270,14 @@ const searchText = search.toLowerCase();
             ))
           )}
         </tbody> */}
-        <Table users={sortedUsers} onDelete={handleDelete} onEdit={handleEdit}/>
-      </table>
-    </>
+          <Table
+            users={sortedUsers}
+            onDelete={handleDelete}
+            onEdit={handleEdit}
+          />
+        </table>
+      </div>
+    </div>
   );
 }
 
