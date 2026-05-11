@@ -31,9 +31,9 @@ body{
 
 input {
   width: 240px;
-  padding: 10px;
   border-radius: 4px;
   border: 1px solid #4c6baa;
+  padding: 0px 10px;
 }
 
 input:focus {
@@ -45,6 +45,7 @@ input:focus {
 h1 {
   margin-bottom: 30px;
   color: #111827;
+  font-size: 64px;
 }
 .table-container {
   background-color: white;
@@ -94,7 +95,11 @@ tbody tr {
 }
 
 tbody tr:hover {
-  background-color: #f8fafc;
+  background-color: #f8fbff;
+}
+input,
+button {
+  height: 36px;
 }
 
 button {
@@ -130,6 +135,6 @@ button:hover {
 }
 
 .active-sort {
-  background-color: #1d4ed8;
+  background-color: #1e40af;
 }
 
