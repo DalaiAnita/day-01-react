@@ -4,6 +4,7 @@ import Profile from "./Profile";
 import Students from "./Students";
 import SearchBar from "./SearchBar";
 import Table from "./Table";
+import TableRow from "./TableRow";
 function App() {
 
   const [sortConfig, setSortConfig] = useState({
@@ -20,9 +21,10 @@ function App() {
   const [editUserId, setEditUserId] = useState(null);
   const [editData, setEditData] = useState({});
   const [loading, setLoading] = useState(true);
-  const[error, setError] = useState(false);
-
-
+  const [error, setError] = useState(false);
+  const [text, setText] = useState("");
+  const [searchInputText, setSearchInputText] = useState("");
+  const [debounceSearch, setDebounceSearch] = useState("");
 
 
   useEffect(() => {
@@ -37,6 +39,26 @@ function App() {
         setLoading(false);
       });
   }, []);
+
+
+  useEffect(() => {
+    console.log("Text changed");
+
+    return () => {
+      console.log("Cleanup");
+    };
+  }, [text]);
+
+
+useEffect(()=>{
+  const timer = setTimeout(()=>{
+    setDebounceSearch(searchInputText);
+  },500);
+
+  return ()=>{
+    clearTimeout(timer)
+  }
+},[searchInputText]);
 
 
 const searchText = search.toLowerCase();
@@ -206,6 +228,18 @@ const searchText = search.toLowerCase();
             Reset
           </button>
         </div>
+        <div className="form-group">
+          <input type="text" 
+            value={searchInputText}
+            onChange={(e)=>setSearchInputText(e.target.value)}
+          />
+             <textarea rows="6" cols="55"
+              placeholder="Enter your message"
+              value={text}
+              onChange={(e)=>setText(e.target.value)}
+            />
+            <p>Characters: {text.length}</p>
+        </div>
       </div>
 
       <div className="table-container">
@@ -254,22 +288,23 @@ const searchText = search.toLowerCase();
               <th>Actions</th>
             </tr>
           </thead>
-          {/* <tbody>
-          {sortedUsers.length === 0 ? (
-            <tr>
-              <td colSpan="3"> No results found.</td>
-            </tr>
-          ) : (
-            sortedUsers.map((user, index) => (
-              <Profile
-                key={index}
-                name={user.name}
-                email={user.email}
-                company={user.company.name}
+          <tbody>
+          {sortedUsers.length > 0 ? (
+            sortedUsers.map((user) => (
+              <TableRow
+                key={user.id}
+                user={user}
               />
             ))
-          )}
-        </tbody> */}
+          ) : (
+            <tr>
+              <td colSpan="4" className="no-results">
+                No results found.
+              </td>
+            </tr>
+          )
+        }
+        </tbody>
           <Table
             users={sortedUsers}
             onDelete={handleDelete}

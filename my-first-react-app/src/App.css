@@ -138,3 +138,8 @@ button:hover {
   background-color: #1e40af;
 }
 
+.no-results {
+  padding: 16px;
+  background-color: rgb(233, 134, 134);
+  color: white;
+}
