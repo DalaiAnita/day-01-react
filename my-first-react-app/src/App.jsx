@@ -5,6 +5,10 @@ import Students from "./Students";
 import SearchBar from "./SearchBar";
 import Table from "./Table";
 import TableRow from "./TableRow";
+import { FaUserPlus } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
+import { FaUsers } from "react-icons/fa";
+
 function App() {
 
   const [sortConfig, setSortConfig] = useState({
@@ -49,19 +53,21 @@ function App() {
     };
   }, [text]);
 
+//debounce search
+  useEffect(()=>{
+    const timer = setTimeout(()=>{
+      setDebounceSearch(search);
+    },500);
 
-useEffect(()=>{
-  const timer = setTimeout(()=>{
-    setDebounceSearch(searchInputText);
-  },500);
+    return ()=>{
+      clearTimeout(timer)
+    }
+  },[search]);
 
-  return ()=>{
-    clearTimeout(timer)
-  }
-},[searchInputText]);
+  
+//Debounce filterring data
 
-
-const searchText = search.toLowerCase();
+const searchText = debounceSearch.toLowerCase();
   const filteredUser = users.filter(
     (user) =>
       user.name?.toLowerCase().includes(searchText) ||
@@ -160,7 +166,8 @@ const searchText = search.toLowerCase();
 
   return (
     <div className="container">
-      <h1>User Management</h1>
+      <h2>User Management</h2>
+      <p className="subtitle">Manage and organize your user efficiently.</p>
       <div className="toolbar">
         <div className="search-group">
           <SearchBar search={search} setSearch={setSearch} />
@@ -169,37 +176,74 @@ const searchText = search.toLowerCase();
           </button>
         </div>
 
-        <div className="form-group">
-          <input
-            type="text"
-            placeholder="Name"
-            value={editUserId ? editData.name : newUser.name}
-            onChange={(e) =>
-              editUserId
-                ? setEditData({ ...editData, name: e.target.value })
-                : setNewUser({ ...newUser, name: e.target.value })
-            }
-          />
-          <input
-            type="text"
-            placeholder="Email"
-            value={editUserId ? editData.email : newUser.email}
-            onChange={(e) =>
-              editUserId
-                ? setEditData({ ...editData, email: e.target.value })
-                : setNewUser({ ...newUser, email: e.target.value })
-            }
-          />
-          <input
-            type="text"
-            placeholder="Company Name"
-            value={editUserId ? editData.company : newUser.company}
-            onChange={(e) =>
-              editUserId
-                ? setEditData({ ...editData, company: e.target.value })
-                : setNewUser({ ...newUser, company: e.target.value })
-            }
-          />
+        <div className="from-card">
+          <h5 className="section-title">
+            <FaUserPlus />
+            Add New user
+          </h5>
+          <div className="form-grid">
+            <div className="input-group">
+              <label>Name</label>
+              <input
+                type="text"
+                placeholder="Enter full name"
+                value={editUserId ? editData.name : newUser.name}
+                onChange={(e) =>
+                  editUserId
+                    ? setEditData({ ...editData, name: e.target.value })
+                    : setNewUser({ ...newUser, name: e.target.value })
+                }
+              />
+            </div>
+
+            <div className="input-group">
+              <label>Email</label>
+              <input
+                type="text"
+                placeholder="Enter email address"
+                value={editUserId ? editData.email : newUser.email}
+                onChange={(e) =>
+                  editUserId
+                    ? setEditData({ ...editData, email: e.target.value })
+                    : setNewUser({ ...newUser, email: e.target.value })
+                }
+              />
+            </div>
+
+            <div className="input-group">
+              <label>Company Name</label>
+              <input
+                type="text"
+                placeholder="Enter company name"
+                value={editUserId ? editData.company : newUser.company}
+                onChange={(e) =>
+                  editUserId
+                    ? setEditData({ ...editData, company: e.target.value })
+                    : setNewUser({ ...newUser, company: e.target.value })
+                }
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="message-section">
+          <div className="input-group">
+            <label>Message(Optional)</label>
+            <input type="text" placeholder="Enter your message" />
+          </div>
+          <div className="input-group textarea-box">
+            <label>Additional Note(Optional)</label>
+            <textarea
+              rows="3"
+              placeholder="Enter your message here..."
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            />
+            <p>Characters: {text.length}</p>
+          </div>
+        </div>
+        
+        <div className="button-group">
           <button
             className="add-btn"
             onClick={editUserId ? handleUpdate : handleAdd}
@@ -228,89 +272,20 @@ const searchText = search.toLowerCase();
             Reset
           </button>
         </div>
-        <div className="form-group">
-          <input type="text" 
-            value={searchInputText}
-            onChange={(e)=>setSearchInputText(e.target.value)}
-          />
-             <textarea rows="6" cols="55"
-              placeholder="Enter your message"
-              value={text}
-              onChange={(e)=>setText(e.target.value)}
-            />
-            <p>Characters: {text.length}</p>
-        </div>
       </div>
 
       <div className="table-container">
-        <table border="2">
-          <thead>
-            <tr>
-              <th
-                className={sortConfig.key === "name" ? "active-sort" : ""}
-                onClick={() => handleSort("name")}
-              >
-                Name{" "}
-                <span>
-                  {sortConfig.key === "name"
-                    ? sortConfig.direction === "asc"
-                      ? "▲"
-                      : "▼"
-                    : ""}
-                </span>
-              </th>
-              <th
-                className={sortConfig.key === "email" ? "active-sort" : ""}
-                onClick={() => handleSort("email")}
-              >
-                Email{" "}
-                <span>
-                  {sortConfig.key === "email"
-                    ? sortConfig.direction === "asc"
-                      ? "▲"
-                      : "▼"
-                    : ""}
-                </span>
-              </th>
-              <th
-                className={sortConfig.key === "company" ? "active-sort" : ""}
-                onClick={() => handleSort("company.name")}
-              >
-                Company{" "}
-                <span>
-                  {sortConfig.key === "company.name"
-                    ? sortConfig.direction === "asc"
-                      ? "▲"
-                      : "▼"
-                    : ""}
-                </span>
-              </th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-          {sortedUsers.length > 0 ? (
-            sortedUsers.map((user) => (
-              <TableRow
-                key={user.id}
-                user={user}
-              />
-            ))
-          ) : (
-            <tr>
-              <td colSpan="4" className="no-results">
-                No results found.
-              </td>
-            </tr>
-          )
-        }
-        </tbody>
-          <Table
+        <h5 className="section-title">
+          <FaUsers />
+          User List
+        </h5>
+        <Table
             users={sortedUsers}
             onDelete={handleDelete}
             onEdit={handleEdit}
+            sortConfig={sortConfig}
+            handleSort={handleSort}
           />
-        </table>
       </div>
     </div>
   );
