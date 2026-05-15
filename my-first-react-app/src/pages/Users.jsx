@@ -162,7 +162,7 @@ const searchText = debounceSearch.toLowerCase();
   }
 
     return (
-        <div className="container">
+    <div className="container">
       <h2>User Management</h2>
       <p className="subtitle">Manage and organize your user efficiently.</p>
       <div className="toolbar">
@@ -173,7 +173,7 @@ const searchText = debounceSearch.toLowerCase();
           </button>
         </div>
 
-        <div className="from-card">
+        <div className="form-card">
           <h5 className="section-title">
             <FaUserPlus />
             Add New user
